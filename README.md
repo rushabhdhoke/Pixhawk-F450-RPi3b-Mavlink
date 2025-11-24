@@ -12,16 +12,16 @@ A complete, reproducible build of an autonomous quadcopter using an **F450** fra
 - A Raspberry Pi 3B+ connected to Pixhawk **TELEM2** via UART, streaming MAVLink.
 - Python scripts (DroneKit) for connect→arm→takeoff→navigate; plus logging and MAVProxy utilities.
 
-Brief frame/parts notes are in `docs/assembly.md` (F450, 2212 motors, BLHeli-S ESCs, FS-i6X/IA6B, etc.). :contentReference[oaicite:3]{index=3}
+Brief frame/parts notes are in `docs/assembly.md` (F450, 2212 motors, BLHeli-S ESCs, FS-i6X/IA6B, etc.). 
 
 ---
 
 ## Hardware overview
 
-- **Airframe:** F450 X-quad, ~280 g, typical 3–4S Li-Po with ~10–20 min endurance. :contentReference[oaicite:4]{index=4}  
+- **Airframe:** F450 X-quad, ~280 g, typical 3–4S Li-Po with ~10–20 min endurance. 
 - **Autopilot:** Pixhawk 2.4.8 (ArduCopter).  
 - **Companion computer:** Raspberry Pi 3B+ (**3.3 V TTL UART**).  
-- **Telemetry/RC:** FS-i6X + IA6B (≥ 500 m LOS), optional 915 MHz telemetry radio. :contentReference[oaicite:5]{index=5}
+- **Telemetry/RC:** FS-i6X + IA6B (≥ 500 m LOS), optional 915 MHz telemetry radio 
 
 ---
 
@@ -29,8 +29,8 @@ Brief frame/parts notes are in `docs/assembly.md` (F450, 2212 motors, BLHeli-S E
 
 **Goal:** Serial MAVLink over Pixhawk **TELEM2** ↔ Pi UART.
 
-- Connect **Pixhawk TELEM2 TX** → **Pi RX (GPIO15)**, **TELEM2 RX** → **Pi TX (GPIO14)**; **GND↔GND**. Keep wiring short; both sides use 3.3 V logic (don’t power Pixhawk from Pi’s 5 V). ArduPilot’s companion-computer guide shows the TELEM2↔Pi wiring for MAVLink. :contentReference[oaicite:6]{index=6}
-- If you prefer a USB-serial dongle instead of GPIO UART, use FTDI/CP2102 and connect TELEM2 to the adapter; it will appear as `/dev/ttyUSB*`. :contentReference[oaicite:7]{index=7}
+- Connect **Pixhawk TELEM2 TX** → **Pi RX (GPIO15)**, **TELEM2 RX** → **Pi TX (GPIO14)**; **GND↔GND**. Keep wiring short; both sides use 3.3 V logic (don’t power Pixhawk from Pi’s 5 V). ArduPilot’s companion-computer guide shows the TELEM2↔Pi wiring for MAVLink. 
+- If you prefer a USB-serial dongle instead of GPIO UART, use FTDI/CP2102 and connect TELEM2 to the adapter; it will appear as `/dev/ttyUSB*`.
 
 See `docs/wiring.md` for a pinout diagram and photos.
 
@@ -39,7 +39,7 @@ See `docs/wiring.md` for a pinout diagram and photos.
 ## Raspberry Pi setup (OS, UART, Python, MAVLink)
 
 1. **Enable UART and disable the serial login shell**
-   - `sudo raspi-config` → **Interface Options** → **Serial Port** → _Login shell over serial? **No**_ → _Enable serial port hardware? **Yes**_. Reboot. :contentReference[oaicite:8]{index=8}
+   - `sudo raspi-config` → **Interface Options** → **Serial Port** → _Login shell over serial? **No**_ → _Enable serial port hardware? **Yes**_. Reboot.
    - After reboot, the primary UART is available at **`/dev/serial0`** on a Pi 3B+.
 
 2. **Serial permissions**
@@ -47,7 +47,7 @@ See `docs/wiring.md` for a pinout diagram and photos.
      ```bash
      sudo usermod -aG dialout $USER
      ```
-     Log out/in (or reboot). :contentReference[oaicite:9]{index=9}
+     Log out/in (or reboot). 
 
 3. **Python environment (DroneKit + MAVLink)**
    - Use Python **3.9** (DroneKit is not maintained for latest 3.11+). Create a venv and install:
@@ -57,7 +57,6 @@ See `docs/wiring.md` for a pinout diagram and photos.
      pip install --upgrade pip
      pip install dronekit pymavlink future pyserial
      ```
-     :contentReference[oaicite:10]{index=10}
 
 4. **MAVProxy (handy CLI for testing)**
    - Install MAVProxy inside the venv (or system-wide), then connect:
@@ -65,7 +64,7 @@ See `docs/wiring.md` for a pinout diagram and photos.
      # inside the venv
      mavproxy.py --master=/dev/serial0 --baudrate 57600 --aircraft MyCopter
      ```
-     This opens a MAVLink console and modules (status, param, etc.). :contentReference[oaicite:11]{index=11} :contentReference[oaicite:12]{index=12}
+     This opens a MAVLink console and modules (status, param, etc.). 
 
 ---
 
@@ -195,3 +194,6 @@ Bench tests (props off): Use motortest to confirm mapping/rotation before arming
 No serial link: Ensure raspi-config serial login is disabled and UART enabled; confirm /dev/serial0 exists; try 57600/115200; swap RX/TX if needed; verify TELEM2 set to MAVLink.
 Permission denied on /dev/serial0: Add user to dialout. 
 Motor outputs on AUX: Re-apply SERVO9..12_FUNCTION and confirm BRD_PWM_COUNT.
+
+## Contact
+For queries please email me or open an issue or submit a pull request.
